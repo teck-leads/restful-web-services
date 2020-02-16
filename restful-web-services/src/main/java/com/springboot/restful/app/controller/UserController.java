@@ -43,8 +43,8 @@ public class UserController {
 	public ResponseEntity<Object> SaveUser(@RequestBody User user) {
 		 user= userService.save(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-		/* return ResponseEntity.created(uri).body(user); */
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.created(uri).body(user); 
+		/* return ResponseEntity.created(uri).build(); */
 
 	}
 
