@@ -4,8 +4,10 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,10 +43,23 @@ public class UserController {
 		return new ResponseEntity<User>(user, HttpStatus.OK);
 
 	}
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Object> deleteUserById(@PathVariable("id") String id) {
+
+		userService.deleteById(Integer.valueOf(id));
+		UriComponents uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
+		// return new ResponseEntity<Object>(HttpStatus.OK);
+
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uri.toUri());
+		return new ResponseEntity<Object>(headers, HttpStatus.OK);
+
+	}
 
 	 @RequestMapping(method = RequestMethod.POST) 
 	/* @PostMapping */
-	public ResponseEntity<Object> SaveUser(@RequestBody User user) {
+	public ResponseEntity<Object> save(@RequestBody User user) {
 		 user= userService.save(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(uri).body(user); 

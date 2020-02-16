@@ -2,6 +2,7 @@ package com.springboot.restful.app.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -45,6 +46,23 @@ public class UserService {
 		}
 
 		return user;
+
+	}
+	
+	public boolean deleteById(Integer id) {
+		Iterator<User> userList=users.iterator();
+		boolean flag=false;
+		while(userList.hasNext()) {
+			User user = userList.next();
+			if(id==user.getId()) {
+				userList.remove();
+				flag=true;
+			}
+		}
+		if (!flag) {
+			throw new UserNotFoundException("id - " + id);
+		}
+		return flag;
 
 	}
 
