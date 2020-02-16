@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.springboot.restful.app.Exceptions.UserNotFoundException;
 import com.springboot.restful.app.model.User;
 @Service
 public class UserService {
@@ -13,8 +15,8 @@ public class UserService {
 	private static List<User> users=new ArrayList<>();
 	private static Integer userId=2;
 	static {
-				users.add(new User(1, "user-1", new Date()));
-				users.add(new User(2, "user-2", new Date()));
+				users.add(new User(1, "madhav", new Date()));
+				users.add(new User(2, "Teja", new Date()));
 				
 	}
 	
@@ -29,14 +31,21 @@ public class UserService {
 		users.add(user);
 		return findById(user.getId());
 	}
-	public User findById(Integer id){
-		for (User user : users) {
-			if(user.getId()==id) {
-				return user;
+
+	public User findById(Integer id) {
+		User user = new User();
+		for (User usr : users) {
+			if (usr.getId() == id) {
+				BeanUtils.copyProperties(usr, user);
 			}
-			
+
 		}
-		return null;
+		if (null == user.getId()) {
+			throw new UserNotFoundException("id - " + id);
+		}
+
+		return user;
+
 	}
 
 }

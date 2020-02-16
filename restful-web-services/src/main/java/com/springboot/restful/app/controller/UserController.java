@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,14 +34,11 @@ public class UserController {
 	}
 
 	@GetMapping("/{id}")
-	public User getUserById(@PathVariable("id") Integer id) {
-		
-		User user = userService.findById(id);
-		if(null==user) {
-			throw new UserNotFoundException("id - "+id);
-		}
+	public ResponseEntity<User> getUserById(@PathVariable("id") String id) {
 
-		return userService.findById(id);
+		User user = userService.findById(Integer.valueOf(id));
+
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 
 	}
 
