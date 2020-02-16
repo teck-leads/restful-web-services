@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
 import com.springboot.restful.app.service.UserService;
+import com.springboot.restful.app.Exceptions.UserNotFoundException;
 import com.springboot.restful.app.model.User;
 
 @RestController
@@ -33,6 +34,11 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public User getUserById(@PathVariable("id") Integer id) {
+		
+		User user = userService.findById(id);
+		if(null==user) {
+			throw new UserNotFoundException("id - "+id);
+		}
 
 		return userService.findById(id);
 
